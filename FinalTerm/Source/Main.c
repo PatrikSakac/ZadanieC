@@ -5,11 +5,11 @@
 #include <time.h>
 
 #include "UserInterface.h"
-/*
-#include "DatumCas.h"
+
+/*#include "DatumCas.h"
 #include "ZoznamSuvenirov.h"
-#include "VypisNaKonzolu.h"
-*/
+#include "VypisNaKonzolu.h"*/
+
 int main(int argc, char **argv) {
 	setvbuf(stdout, NULL, _IONBF, 0);
 
