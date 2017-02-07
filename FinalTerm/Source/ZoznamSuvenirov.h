@@ -23,7 +23,7 @@ void freeZoznam(ZoznamSuvenirov* zoznam);
 
 void freeSuvenir(Suvenir suvenir);
 
-Suvenir suvenir(DatumCas datumVyroby, char* nazov, char* kategoria, char* autor,
+Suvenir* suvenir(DatumCas datumVyroby, char* nazov, char* kategoria, char* autor,
 		double cena, DatumCas datumPredaja);
 
 void nacitajAPridajSuvenir(ZoznamSuvenirov* zoznam);
@@ -34,7 +34,7 @@ char** toStringZoznamSuvenirov(ZoznamSuvenirov* zoznam);
 
 char* toStringSuvenir(Suvenir suvenir);
 
-Suvenir fromStringSuvenir(char* string);
+Suvenir* fromStringSuvenir(char* string);
 
 void uloz(ZoznamSuvenirov* zoznam,char* nazovSuboru);
 

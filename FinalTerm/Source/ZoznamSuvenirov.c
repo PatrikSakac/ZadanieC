@@ -22,8 +22,6 @@ void freeZoznam(ZoznamSuvenirov* zoznam) {
 		freeSuvenir(zoznam->suveniry[i]);
 	}
 	free(zoznam->suveniry);
-	free(&zoznam->kapacita);
-	free(&zoznam->pocet);
 }
 
 void freeSuvenir(Suvenir suvenir) {
@@ -32,16 +30,18 @@ void freeSuvenir(Suvenir suvenir) {
 	free(suvenir.nazov);
 }
 
-Suvenir suvenir(DatumCas datumVyroby, char* nazov, char* kategoria, char* autor,
+Suvenir* suvenir(DatumCas datumVyroby, char* nazov, char* kategoria, char* autor,
 		double cena, DatumCas datumPredaja) {
-	Suvenir suvenir = { .datumVyroby = datumVyroby, .nazov = nazov, .kategoria =
+	Suvenir* suvenir = malloc(sizeof(Suvenir));
+	Suvenir suv = { .datumVyroby = datumVyroby, .nazov = nazov, .kategoria =
 			kategoria, .autor = autor, .cena = cena, .datumPredaja =
 			datumPredaja };
+	*suvenir=suv;
 	return suvenir;
 }
 
 void nacitajAPridajSuvenir(ZoznamSuvenirov* zoznam) {
-	Suvenir suv;const char* delim = "\n";
+	Suvenir* suv;const char* delim = "\n";
 	char* datumVyroby = malloc(sizeof(char) * dlzkaRiadku);
 	char* nazov = malloc(sizeof(char) * dlzkaRiadku);
 	char* autor = malloc(sizeof(char) * dlzkaRiadku);
@@ -80,7 +80,7 @@ void nacitajAPridajSuvenir(ZoznamSuvenirov* zoznam) {
 	free(kategoria);
 	free(autor);
 
-	pridaj(zoznam, &suv);
+	pridaj(zoznam, suv);
 
 }
 
@@ -118,11 +118,11 @@ char* toStringSuvenir(Suvenir suvenir) {
 	return string;
 }
 
-Suvenir fromStringSuvenir(char* s) {
+Suvenir* fromStringSuvenir(char* s) {
 	char* string = malloc(sizeof(char) * (strlen(s) + 1));
 	strcpy(string, s);
 
-	Suvenir suv;
+	Suvenir* suv = NULL;
 	char** tokens = malloc(6 * sizeof(char*));
 	const char* delim = "\t";
 	if (string != NULL) {
@@ -191,8 +191,9 @@ ZoznamSuvenirov* zoSuboru(char* nazovSuboru) {
 
 		int j;
 		for (j = 0; j < i; j++) {
-			Suvenir suv = fromStringSuvenir(tokens[j]);
-			pridaj(zoznam, &suv);
+			Suvenir* suv = malloc(sizeof(Suvenir));
+			suv = fromStringSuvenir(tokens[j]);
+			pridaj(zoznam, suv);
 		}
 		for (j = 0; j < i; j++) {
 			free(tokens[j]);
@@ -226,18 +227,18 @@ char** zoznamUmelcov(ZoznamSuvenirov* zoznam, int* pocet) {
 }
 
 Suvenir najlacnejsiVPredaji(ZoznamSuvenirov* zoznam) {
-	Suvenir suv = suvenir(nezadane(), "neexistuje", "nepredany", "suvenir", 0,
+	Suvenir* suv = suvenir(nezadane(), "neexistuje", "nepredany", "suvenir", 0,
 			nezadane());
 	int i;
 	double najnizsiaCena = INT_MAX;
 	for (i = 0; i < zoznam->pocet; i++) {
 		if (isNezadane(zoznam->suveniry[i].datumPredaja)
 				&& zoznam->suveniry[i].cena < najnizsiaCena) {
-			suv = zoznam->suveniry[i];
-			najnizsiaCena = suv.cena;
+			suv = &zoznam->suveniry[i];
+			najnizsiaCena = suv->cena;
 		}
 	}
-	return suv;
+	return *suv;
 }
 
 ZoznamSuvenirov* zoznamPodlaKategorie(ZoznamSuvenirov* zoznam, char* kategoria) {
