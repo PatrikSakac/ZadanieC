@@ -44,7 +44,7 @@ void vyberMoznosti() {
 			vypisUmelcov(zoznam);
 			break;
 		}
-		//uloz(zoznam,nazovSuboru);
+		uloz(zoznam,nazovSuboru);
 		freeZoznam(zoznam);
 	}
 

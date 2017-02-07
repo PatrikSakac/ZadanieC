@@ -33,10 +33,18 @@ void freeSuvenir(Suvenir suvenir) {
 Suvenir* suvenir(DatumCas datumVyroby, char* nazov, char* kategoria, char* autor,
 		double cena, DatumCas datumPredaja) {
 	Suvenir* suvenir = malloc(sizeof(Suvenir));
-	Suvenir suv = { .datumVyroby = datumVyroby, .nazov = nazov, .kategoria =
-			kategoria, .autor = autor, .cena = cena, .datumPredaja =
+
+	char* nazovCopy = malloc((strlen(nazov)+1)*sizeof(char));
+	char* kategoriaCopy = malloc((strlen(kategoria)+1)*sizeof(char));
+	char* autorCopy = malloc((strlen(autor)+1)*sizeof(char));
+
+	strcpy(nazovCopy,nazov);
+	strcpy(kategoriaCopy,kategoria);
+	strcpy(autorCopy,autor);
+
+	*suvenir = (Suvenir){ .datumVyroby = datumVyroby, .nazov = nazovCopy, .kategoria =
+			kategoriaCopy, .autor = autorCopy, .cena = cena, .datumPredaja =
 			datumPredaja };
-	*suvenir=suv;
 	return suvenir;
 }
 
@@ -154,8 +162,6 @@ void uloz(ZoznamSuvenirov* zoznam, char* nazovSuboru) {
 			suvenirString = toStringSuvenir(zoznam->suveniry[i]);
 			strcat(suvenirString, "\n");
 			fputs(suvenirString, file);
-
-			printf("\nukladam %s",suvenirString);
 		}
 	}
 	fclose(file);
@@ -165,7 +171,6 @@ ZoznamSuvenirov* zoSuboru(char* nazovSuboru) {
 	FILE* file = fopen(nazovSuboru, "r");
 	ZoznamSuvenirov* zoznam = novyZoznam();
 	if (file != NULL) {
-
 		char* buffer;
 		const char* delim = "\n";
 		int velkostSuboru;
@@ -183,6 +188,7 @@ ZoznamSuvenirov* zoSuboru(char* nazovSuboru) {
 		char** tokens = malloc(sizeof(char*));
 		int i = 0;
 		tokens[0] = strtok(buffer, delim);
+
 		while (tokens[i] != NULL) {
 			i++;
 			tokens = realloc(tokens, (i + 1) * sizeof(char*));
@@ -195,9 +201,7 @@ ZoznamSuvenirov* zoSuboru(char* nazovSuboru) {
 			suv = fromStringSuvenir(tokens[j]);
 			pridaj(zoznam, suv);
 		}
-		for (j = 0; j < i; j++) {
-			free(tokens[j]);
-		}
+
 		free(tokens);
 		free(buffer);
 	}

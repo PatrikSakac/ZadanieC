@@ -9,7 +9,6 @@
 DatumCas* fromStringDatumCas(char* s) {
 	char* string = malloc(sizeof(char) * (strlen(s) + 1));
 	strcpy(string, s);
-
 	DatumCas* datumCas = malloc(sizeof(DatumCas));
 
 	const char* delim = "-";
@@ -18,20 +17,20 @@ DatumCas* fromStringDatumCas(char* s) {
 
 		char* token = strtok(string, delim);
 
-		if (strcmp(token, "nezadane") == 0) {
+		if (strcmp(token, "nezadane") == 0 || strcmp(token,"0") == 0) {
 			*datumCas = nezadane();
 			return datumCas;
 		}
-
 		int rok = atoi(token);
 		int mesiac = atoi(strtok(NULL, delim));
 		int den = atoi(strtok(NULL, delim));
 		int hodiny = atoi(strtok(NULL, delim));
 		int minuty = atoi(strtok(NULL, delim));
 
-		DatumCas dat = { rok, mesiac, den, hodiny, minuty };
-		*datumCas = dat;
+		*datumCas = (DatumCas){ rok, mesiac, den, hodiny, minuty };;
 	}
+
+	free(string);
 	return datumCas;
 }
 
