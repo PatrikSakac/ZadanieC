@@ -30,66 +30,22 @@ void freeSuvenir(Suvenir suvenir) {
 	free(suvenir.nazov);
 }
 
-Suvenir* suvenir(DatumCas datumVyroby, char* nazov, char* kategoria, char* autor,
-		double cena, DatumCas datumPredaja) {
+Suvenir* suvenir(DatumCas datumVyroby, char* nazov, char* kategoria,
+		char* autor, double cena, DatumCas datumPredaja) {
 	Suvenir* suvenir = malloc(sizeof(Suvenir));
 
-	char* nazovCopy = malloc((strlen(nazov)+1)*sizeof(char));
-	char* kategoriaCopy = malloc((strlen(kategoria)+1)*sizeof(char));
-	char* autorCopy = malloc((strlen(autor)+1)*sizeof(char));
+	char* nazovCopy = malloc((strlen(nazov) + 1) * sizeof(char));
+	char* kategoriaCopy = malloc((strlen(kategoria) + 1) * sizeof(char));
+	char* autorCopy = malloc((strlen(autor) + 1) * sizeof(char));
 
-	strcpy(nazovCopy,nazov);
-	strcpy(kategoriaCopy,kategoria);
-	strcpy(autorCopy,autor);
+	strcpy(nazovCopy, nazov);
+	strcpy(kategoriaCopy, kategoria);
+	strcpy(autorCopy, autor);
 
-	*suvenir = (Suvenir){ .datumVyroby = datumVyroby, .nazov = nazovCopy, .kategoria =
-			kategoriaCopy, .autor = autorCopy, .cena = cena, .datumPredaja =
-			datumPredaja };
+	*suvenir = (Suvenir ) { .datumVyroby = datumVyroby, .nazov = nazovCopy,
+					.kategoria = kategoriaCopy, .autor = autorCopy,
+					.cena = cena, .datumPredaja = datumPredaja };
 	return suvenir;
-}
-
-void nacitajAPridajSuvenir(ZoznamSuvenirov* zoznam) {
-	Suvenir* suv;const char* delim = "\n";
-	char* datumVyroby = malloc(sizeof(char) * dlzkaRiadku);
-	char* nazov = malloc(sizeof(char) * dlzkaRiadku);
-	char* autor = malloc(sizeof(char) * dlzkaRiadku);
-	char* kategoria = malloc(sizeof(char) * dlzkaRiadku);
-	double cena;
-	char* datumPredaja = malloc(sizeof(char) * dlzkaRiadku);
-	getchar();
-
-	printf("datum vyroby (rok-mesiac-den-hodina-minuta): ");
-	fgets(datumVyroby, dlzkaRiadku, stdin);
-	datumVyroby = strtok(datumVyroby,delim);
-
-	printf("nazov: ");
-	fgets(nazov, dlzkaRiadku, stdin);
-	nazov = strtok(nazov,delim);
-
-	printf("autor: ");
-	fgets(autor, dlzkaRiadku, stdin);
-	autor = strtok(autor,delim);
-
-	printf("kategoria: ");
-	fgets(kategoria, dlzkaRiadku, stdin);
-	kategoria = strtok(kategoria,delim);
-
-	printf("cena: ");
-	scanf("%lf", &cena);
-
-	getchar();
-	printf("datum predaja (rok-mesiac-den-hodina-minuta): ");
-	fgets(datumPredaja, dlzkaRiadku, stdin);
-	datumPredaja = strtok(datumPredaja,delim);
-
-	suv = suvenir(*fromStringDatumCas(datumVyroby), nazov, kategoria, autor,
-			cena, *fromStringDatumCas(datumPredaja));
-	free(nazov);
-	free(kategoria);
-	free(autor);
-
-	pridaj(zoznam, suv);
-
 }
 
 void pridaj(ZoznamSuvenirov* zoznam, Suvenir* suvenir) {
@@ -113,7 +69,6 @@ char** toStringZoznamSuvenirov(ZoznamSuvenirov* zoznam) {
 		Suvenir suvenir = zoznam->suveniry[i];
 		string[i] = toStringSuvenir(suvenir);
 	}
-
 	return string;
 }
 
@@ -130,12 +85,13 @@ Suvenir* fromStringSuvenir(char* s) {
 	char* string = malloc(sizeof(char) * (strlen(s) + 1));
 	strcpy(string, s);
 
+	int i;
 	Suvenir* suv = NULL;
 	char** tokens = malloc(6 * sizeof(char*));
 	const char* delim = "\t";
+
 	if (string != NULL) {
 		tokens[0] = strtok(string, delim);
-		int i;
 		for (i = 1; i < 6; i++) {
 			tokens[i] = strtok(NULL, delim);
 			if (tokens[i] == NULL)
@@ -148,7 +104,7 @@ Suvenir* fromStringSuvenir(char* s) {
 				datumPredaja);
 
 	}
-
+	free(tokens);
 	free(string);
 	return suv;
 }
@@ -156,14 +112,17 @@ Suvenir* fromStringSuvenir(char* s) {
 void uloz(ZoznamSuvenirov* zoznam, char* nazovSuboru) {
 	FILE* file = fopen(nazovSuboru, "w");
 	if (file != NULL) {
-		char* suvenirString;
+		char* suvenirString = NULL;
 		int i;
 		for (i = 0; i < zoznam->pocet; i++) {
 			suvenirString = toStringSuvenir(zoznam->suveniry[i]);
 			strcat(suvenirString, "\n");
 			fputs(suvenirString, file);
 		}
+		if (suvenirString != NULL)
+			free(suvenirString);
 	}
+
 	fclose(file);
 }
 
@@ -210,7 +169,7 @@ ZoznamSuvenirov* zoSuboru(char* nazovSuboru) {
 }
 
 char** zoznamUmelcov(ZoznamSuvenirov* zoznam, int* pocet) {
-	char** umelci = malloc(sizeof(char*));
+	char** umelci = malloc(sizeof(char*) * zoznam->pocet);
 	int i, j, pridaj, pocetUmelcov = 0;
 	for (i = 0; i < zoznam->pocet; i++) {
 		pridaj = 1;
@@ -221,9 +180,11 @@ char** zoznamUmelcov(ZoznamSuvenirov* zoznam, int* pocet) {
 			}
 		}
 		if (pridaj) {
-			umelci[pocetUmelcov] = zoznam->suveniry[i].autor;
+			char* pridavany = malloc(
+					(strlen(zoznam->suveniry[i].autor) + 1) * sizeof(char));
+			strcpy(pridavany, zoznam->suveniry[i].autor);
+			umelci[pocetUmelcov] = pridavany;
 			pocetUmelcov++;
-			umelci = realloc(umelci, (pocetUmelcov + 1));
 		}
 	}
 	*pocet = pocetUmelcov;
@@ -245,7 +206,7 @@ Suvenir najlacnejsiVPredaji(ZoznamSuvenirov* zoznam) {
 	return *suv;
 }
 
-ZoznamSuvenirov* zoznamPodlaKategorie(ZoznamSuvenirov* zoznam, char* kategoria) {
+ZoznamSuvenirov* zoznamPodlaKategorie(ZoznamSuvenirov* zoznam,char* kategoria) {
 	ZoznamSuvenirov* novy_zoznam = novyZoznam();
 	int i;
 	for (i = 0; i < zoznam->pocet; i++) {
@@ -253,6 +214,7 @@ ZoznamSuvenirov* zoznamPodlaKategorie(ZoznamSuvenirov* zoznam, char* kategoria) 
 			pridaj(novy_zoznam, &zoznam->suveniry[i]);
 		}
 	}
+
 	return novy_zoznam;
 }
 
@@ -276,7 +238,7 @@ int inventura(ZoznamSuvenirov* zoznam, char** nazvy, int* pocty) {
 	return pocetNazvov;
 }
 
-double predaj(ZoznamSuvenirov* zoznam, char* nazov, DatumCas datumPredaja) {
+double predaj(ZoznamSuvenirov* zoznam,char* nazov,DatumCas datumPredaja) {
 	double najnizsiaCena = INT_MAX;
 	int i;
 	Suvenir* suv = NULL;
@@ -288,9 +250,14 @@ double predaj(ZoznamSuvenirov* zoznam, char* nazov, DatumCas datumPredaja) {
 			najnizsiaCena = suv->cena;
 		}
 	}
-	if (suv != NULL)
+
+	if (suv != NULL) {
 		suv->datumPredaja = datumPredaja;
-	return najnizsiaCena;
+		return najnizsiaCena;
+	} else {
+		return -1;
+	}
+
 }
 
 int vyplata(ZoznamSuvenirov* zoznam, char** umelci, double* vyplaty, int rok,

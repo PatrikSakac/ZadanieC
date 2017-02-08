@@ -26,8 +26,6 @@ void freeSuvenir(Suvenir suvenir);
 Suvenir* suvenir(DatumCas datumVyroby, char* nazov, char* kategoria, char* autor,
 		double cena, DatumCas datumPredaja);
 
-void nacitajAPridajSuvenir(ZoznamSuvenirov* zoznam);
-
 void pridaj(ZoznamSuvenirov* zoznam,Suvenir* suvenir);
 
 char** toStringZoznamSuvenirov(ZoznamSuvenirov* zoznam);

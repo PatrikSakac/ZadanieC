@@ -1,0 +1,7 @@
+2008-12-5-4-29	Kamen modry	stare	Jozo	2.69	2012-7-19-10-44
+2012-1-20-8-0	Malovanky farebne	nove	Dano	0.99	2013-2-18-10-0
+2010-11-30-12-25	Kamen cerveny	nove	Jozo	2.49	2017-8-2-14-50
+2017-12-5-12-56	Marekov suvenir	specialne	Marek	500.02	2017-8-2-15-1
+2012-1-20-10-0	Malovanky ciernobiele	stare	Dano	0.79	nezadane
+2016-8-2-14-50	Experimentalny kamen	stare	Rado	3.69	nezadane
+2016-7-3-12-15	Kamen modry	nove	Dano	5.78	nezadane
