@@ -5,7 +5,6 @@
 
 #include "DatumCas.h"
 
-
 DatumCas* fromStringDatumCas(char* s) {
 	char* string = malloc(sizeof(char) * (strlen(s) + 1));
 	strcpy(string, s);
@@ -17,17 +16,41 @@ DatumCas* fromStringDatumCas(char* s) {
 
 		char* token = strtok(string, delim);
 
-		if (strcmp(token, "nezadane") == 0 || strcmp(token,"0") == 0) {
+		if (token == NULL || strcmp(token, "nezadane") == 0
+				|| strcmp(token, "0") == 0) {
 			*datumCas = nezadane();
 			return datumCas;
 		}
-		int rok = atoi(token);
-		int mesiac = atoi(strtok(NULL, delim));
-		int den = atoi(strtok(NULL, delim));
-		int hodiny = atoi(strtok(NULL, delim));
-		int minuty = atoi(strtok(NULL, delim));
 
-		*datumCas = (DatumCas){ rok, mesiac, den, hodiny, minuty };;
+		int rok = atoi(token);
+
+		token = strtok(NULL, delim);
+		if (token == NULL) {
+			*datumCas = nezadane();
+			return datumCas;
+		}
+		int mesiac = atoi(token);
+		token = strtok(NULL, delim);
+		if (token == NULL) {
+			*datumCas = nezadane();
+			return datumCas;
+		}
+		int den = atoi(token);
+		token = strtok(NULL, delim);
+		if (token == NULL) {
+			*datumCas = nezadane();
+			return datumCas;
+		}
+		int hodiny = atoi(token);
+		token = strtok(NULL, delim);
+		if (token == NULL) {
+			*datumCas = nezadane();
+			return datumCas;
+		}
+		int minuty = atoi(token);
+
+		*datumCas = (DatumCas ) { rok, mesiac, den, hodiny, minuty };
+
 	}
 
 	free(string);
@@ -80,7 +103,6 @@ long rozdielCasov(DatumCas dc1, DatumCas dc2) {
 	int d1 = dc1.den, d2 = dc2.den;
 	int mes1 = dc1.mesiac, mes2 = dc2.mesiac;
 	int r1 = dc1.rok, r2 = dc2.rok;
-
 
 	if (d2 >= d1) {
 		rozdiel.den = d2 - d1;

@@ -74,8 +74,9 @@ void vyberMoznosti() {
 			vypisZoradPodlaDatumuPredaja(zoznam);
 			break;
 		}
-		uloz(zoznam, nazovSuboru);
+		//uloz(zoznam, nazovSuboru);
 		freeZoznam(zoznam);
+
 	}
 
 }

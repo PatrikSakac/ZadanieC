@@ -84,26 +84,33 @@ char* toStringSuvenir(Suvenir suvenir) {
 Suvenir* fromStringSuvenir(char* s) {
 	char* string = malloc(sizeof(char) * (strlen(s) + 1));
 	strcpy(string, s);
-
+	char* token;
 	int i;
 	Suvenir* suv = NULL;
 	char** tokens = malloc(6 * sizeof(char*));
 	const char* delim = "\t";
 
 	if (string != NULL) {
-		tokens[0] = strtok(string, delim);
+		token = strtok(string, delim);
+		tokens[0] = malloc((strlen(token) + 1) * sizeof(char));
+		strcpy(tokens[0], token);
 		for (i = 1; i < 6; i++) {
-			tokens[i] = strtok(NULL, delim);
-			if (tokens[i] == NULL)
+			token = strtok(NULL, delim);
+			if (token == NULL)
 				return suv;
+			tokens[i] = malloc((strlen(token) + 1) * sizeof(char));
+			strcpy(tokens[i], token);
 		}
+
 		DatumCas datumVyroby = *fromStringDatumCas(tokens[0]);
 		DatumCas datumPredaja = *fromStringDatumCas(tokens[5]);
 		double cena = atof(tokens[4]);
+
 		suv = suvenir(datumVyroby, tokens[1], tokens[2], tokens[3], cena,
 				datumPredaja);
 
 	}
+
 	free(tokens);
 	free(string);
 	return suv;
@@ -131,6 +138,7 @@ ZoznamSuvenirov* zoSuboru(char* nazovSuboru) {
 	ZoznamSuvenirov* zoznam = novyZoznam();
 	if (file != NULL) {
 		char* buffer;
+		char* token;
 		const char* delim = "\n";
 		int velkostSuboru;
 
@@ -146,21 +154,24 @@ ZoznamSuvenirov* zoSuboru(char* nazovSuboru) {
 
 		char** tokens = malloc(sizeof(char*));
 		int i = 0;
-		tokens[0] = strtok(buffer, delim);
-
-		while (tokens[i] != NULL) {
-			i++;
+		token = strtok(buffer, delim);
+		while (token != NULL) {
 			tokens = realloc(tokens, (i + 1) * sizeof(char*));
-			tokens[i] = strtok(NULL, delim);
-		}
+			int len = strlen(token);
+			tokens[i] = malloc((len + 2) * sizeof(char));
+			strcpy(tokens[i], token);
+			tokens[i][len + 1] = '\0';
+			tokens[i][len] = '\t';
+			i++;
+			token = strtok(NULL, delim);
 
+		}
 		int j;
 		for (j = 0; j < i; j++) {
 			Suvenir* suv = malloc(sizeof(Suvenir));
 			suv = fromStringSuvenir(tokens[j]);
 			pridaj(zoznam, suv);
 		}
-
 		free(tokens);
 		free(buffer);
 	}
@@ -206,7 +217,7 @@ Suvenir najlacnejsiVPredaji(ZoznamSuvenirov* zoznam) {
 	return *suv;
 }
 
-ZoznamSuvenirov* zoznamPodlaKategorie(ZoznamSuvenirov* zoznam,char* kategoria) {
+ZoznamSuvenirov* zoznamPodlaKategorie(ZoznamSuvenirov* zoznam, char* kategoria) {
 	ZoznamSuvenirov* novy_zoznam = novyZoznam();
 	int i;
 	for (i = 0; i < zoznam->pocet; i++) {
@@ -238,7 +249,7 @@ int inventura(ZoznamSuvenirov* zoznam, char** nazvy, int* pocty) {
 	return pocetNazvov;
 }
 
-double predaj(ZoznamSuvenirov* zoznam,char* nazov,DatumCas datumPredaja) {
+double predaj(ZoznamSuvenirov* zoznam, char* nazov, DatumCas datumPredaja) {
 	double najnizsiaCena = INT_MAX;
 	int i;
 	Suvenir* suv = NULL;

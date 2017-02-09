@@ -196,7 +196,7 @@ void vypisNajrychlejsieVyrobeny(ZoznamSuvenirov* zoznam) {
 
 	Suvenir suvenir = najrychlejsieVyrobenyVyrobok(zoznam, umelec);
 	char* stringSuvenir = toStringSuvenir(suvenir);
-	printf("\nUmelec: %s najrychlejsie vyrobil:\n\t%s\n", umelec, stringSuvenir);
+	printf("Umelec: %s najrychlejsie vyrobil:\n\t%s\n", umelec, stringSuvenir);
 	free(umelec);
 	free(stringSuvenir);
 }
@@ -204,5 +204,5 @@ void vypisNajrychlejsieVyrobeny(ZoznamSuvenirov* zoznam) {
 void vypisZoradPodlaDatumuPredaja(ZoznamSuvenirov* zoznam) {
 	zoradPodlaDatumuPredaja(zoznam);
 	vypisVsetkych(zoznam,
-			"\n\nVypis vsetkych suvenirov zotriedenych podla datumu predaja:");
+			"Vypis vsetkych suvenirov zotriedenych podla datumu predaja:");
 }
