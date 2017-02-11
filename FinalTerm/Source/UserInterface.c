@@ -9,7 +9,7 @@ static const char* moznosti[] = { "Ukoncit program", "Zobraz moznosti",
 		"Najlacnejsi suvenir v predaji", "Vypis zoznamu podla kategorie",
 		"Inventura", "Predat suvenir", "Vypis vyplat",
 		"Vypis viacdodavatelskych suvenirov", "Co vyrabat",
-		"Najrychlejsie vyrobeny", "Zorad podla datumu predaja" };
+		"Najrychlejsie vyrobeny", "Kedy na dovolenku","Zorad podla datumu predaja" };
 
 static const int pocetMoznosti = sizeof moznosti / sizeof moznosti[0];
 
@@ -71,10 +71,13 @@ void vyberMoznosti() {
 			vypisNajrychlejsieVyrobeny(zoznam);
 			break;
 		case 13:
+			vypisKedyNaDovolenku(zoznam);
+			break;
+		case 14:
 			vypisZoradPodlaDatumuPredaja(zoznam);
 			break;
 		}
-		//uloz(zoznam, nazovSuboru);
+		uloz(zoznam, nazovSuboru);
 		freeZoznam(zoznam);
 
 	}

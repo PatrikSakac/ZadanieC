@@ -201,6 +201,16 @@ void vypisNajrychlejsieVyrobeny(ZoznamSuvenirov* zoznam) {
 	free(stringSuvenir);
 }
 
+void vypisKedyNaDovolenku(ZoznamSuvenirov* zoznam){
+	getchar();
+	int rok;
+	printf("rok: ");
+	scanf("%d",&rok);
+	double trzba = kedyNaDovolenku(zoznam,rok);
+	printf("\tv tomto intervale bola trzba %g\n",trzba);
+
+}
+
 void vypisZoradPodlaDatumuPredaja(ZoznamSuvenirov* zoznam) {
 	zoradPodlaDatumuPredaja(zoznam);
 	vypisVsetkych(zoznam,

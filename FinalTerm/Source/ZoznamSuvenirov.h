@@ -56,6 +56,8 @@ int coVyrabat(ZoznamSuvenirov* zoznam,char** nazvy,char* umelec);
 
 Suvenir najrychlejsieVyrobenyVyrobok(ZoznamSuvenirov* zoznam,char* umelec);
 
+double kedyNaDovolenku(ZoznamSuvenirov* zoznam, int rok);
+
 int compareTo(Suvenir suvenir1,Suvenir suvenir2);
 
 void zoradPodlaDatumuPredaja(ZoznamSuvenirov* zoznam);

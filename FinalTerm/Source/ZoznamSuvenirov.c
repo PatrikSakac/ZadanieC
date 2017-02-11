@@ -404,6 +404,36 @@ Suvenir najrychlejsieVyrobenyVyrobok(ZoznamSuvenirov* zoznam, char* umelec) {
 	return suv;
 }
 
+double kedyNaDovolenku(ZoznamSuvenirov* zoznam, int rok) {
+	int datumOd = 1;
+	double najlepsiSucet = INT_MAX;
+	int najlepsiDatumOd = 1;
+	int i, j;
+	for (i = 0; i < 330; i++) {
+		double sucet = 0;
+		for (j = 0; j < zoznam->pocet; j++) {
+			if (zoznam->suveniry[j].datumPredaja.rok == rok) {
+				DatumCas d = zoznam->suveniry[j].datumPredaja;
+
+				int value = (d.mesiac - 1) * 30 + d.den;
+				if (value >= datumOd && value <= datumOd + 30) {
+					sucet += zoznam->suveniry[j].cena;
+				}
+			}
+		}
+		if (sucet < najlepsiSucet) {
+			najlepsiSucet = sucet;
+			najlepsiDatumOd = datumOd;
+		}
+		datumOd++;
+	}
+	printf(
+			"Na dovolenku je dobre ist v intervale:\n\tod: %d.%d.%d do: %d.%d.%d\n",
+			najlepsiDatumOd % 30, 1 + najlepsiDatumOd / 30, rok,
+			(najlepsiDatumOd + 30) % 30, 1 + (najlepsiDatumOd + 30) / 30, rok);
+	return najlepsiSucet;
+}
+
 int compareTo(Suvenir suvenir1, Suvenir suvenir2) {
 	//vrati 1 ak je suvenir1 > suvenir2
 	if (isNezadane(suvenir1.datumPredaja))

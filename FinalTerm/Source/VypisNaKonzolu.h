@@ -25,6 +25,8 @@ void vypisCoVyrabat(ZoznamSuvenirov* zoznam);
 
 void vypisNajrychlejsieVyrobeny(ZoznamSuvenirov* zoznam);
 
+void vypisKedyNaDovolenku(ZoznamSuvenirov* zoznam);
+
 void vypisZoradPodlaDatumuPredaja(ZoznamSuvenirov* zoznam);
 
 #endif
